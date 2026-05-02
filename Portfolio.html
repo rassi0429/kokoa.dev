@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<title>KOKOA · Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0b0f;
+    --fg: #eef0f2;
+    --accent: oklch(0.87 0.19 112);
+    --muted: rgba(238,240,242,0.6);
+  }
+  [data-accent="cyan"]   { --accent: oklch(0.72 0.17 245); }
+  [data-accent="violet"] { --accent: oklch(0.72 0.18 300); }
+  [data-accent="amber"]  { --accent: oklch(0.82 0.17 75); }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--bg); color: var(--fg); }
+  body {
+    font-family: Manrope, "Zen Kaku Gothic New", sans-serif;
+    font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  @media (max-width: 900px) { body { cursor: auto; } }
+  a { color: inherit; }
+  button { font-family: inherit; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes floatChip { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes scrollProgress { to { transform: scaleX(1); } }
+  @keyframes avatarSpin {
+    0%   { transform: rotateY(0deg); }
+    42%  { transform: rotateY(0deg); }
+    50%  { transform: rotateY(180deg); }
+    92%  { transform: rotateY(180deg); }
+    100% { transform: rotateY(360deg); }
+  }
+  @media (max-width: 900px) {
+    section > div[style*="grid-template-columns: 1.15fr 1fr"],
+    section > div[style*="grid-template-columns: 1.2fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+    section > div[style*="grid-template-columns: 80px 1fr 2fr 100px"] {
+      grid-template-columns: 40px 1fr !important;
+    }
+    section > div[style*="grid-template-columns: 80px 1fr 2fr 100px"] > :nth-child(3),
+    section > div[style*="grid-template-columns: 80px 1fr 2fr 100px"] > :nth-child(4) {
+      grid-column: 2 / 3;
+    }
+    nav > div[style*="gap: 28px"] { display: none !important; }
+  }
+  @media (max-width: 640px) {
+    section { padding-left: 5vw !important; padding-right: 5vw !important; }
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .masonry-cols { column-count: 4; }
+  @media (max-width: 1100px) { .masonry-cols { column-count: 3; } }
+  @media (max-width: 780px)  { .masonry-cols { column-count: 2; } }
+  @media (max-width: 480px)  { .masonry-cols { column-count: 1; } }
+  ::selection { background: var(--accent); color: #0a0b0f; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="tweaks.jsx"></script>
+<script type="text/babel" src="sections-1.jsx"></script>
+<script type="text/babel" src="sections-2.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "cyan",
+  "bg": "grid",
+  "lang": "jp",
+  "density": "compact",
+  "filter": "all",
+  "cursor": "on"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+  const [mouse, setMouse] = useState({x:0, y:0, rawX:0, rawY:0});
+  const [scrollPct, setScrollPct] = useState(0);
+
+  useEffect(() => {
+    const onMove = (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5);
+      const y = (e.clientY / window.innerHeight - 0.5);
+      setMouse({x, y, rawX: e.clientX, rawY: e.clientY});
+    };
+    const onScroll = () => {
+      const h = document.documentElement;
+      setScrollPct(h.scrollTop / (h.scrollHeight - h.clientHeight));
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.accent = tweaks.accent;
+  }, [tweaks.accent]);
+
+  return (
+    <div>
+      <Cursor mouse={mouse} enabled={tweaks.cursor==='on'}/>
+      <ProgressBar pct={scrollPct}/>
+      <Nav tweaks={tweaks}/>
+      <Hero tweaks={tweaks} mouse={mouse}/>
+      <About tweaks={tweaks}/>
+      <Works tweaks={tweaks}/>
+      <Skills tweaks={tweaks}/>
+      <Gallery tweaks={tweaks}/>
+      <Orgs tweaks={tweaks}/>
+      <Footer tweaks={tweaks}/>
+      <TweaksPanel tweaks={tweaks} setTweaks={setTweaks}/>
+    </div>
+  );
+}
+
+function Cursor({mouse, enabled}) {
+  if (!enabled) return null;
+  return <>
+    <div style={{
+      position:'fixed', left: mouse.rawX, top: mouse.rawY,
+      width:8, height:8, borderRadius:4, background:'var(--accent)',
+      pointerEvents:'none', zIndex:10000, transform:'translate(-50%,-50%)',
+      mixBlendMode:'difference',
+    }}/>
+    <div style={{
+      position:'fixed', left: mouse.rawX, top: mouse.rawY,
+      width:40, height:40, borderRadius:20, border:'1px solid var(--accent)',
+      pointerEvents:'none', zIndex:10000, transform:'translate(-50%,-50%)',
+      transition:'width 0.2s, height 0.2s, opacity 0.2s', opacity:0.5,
+    }}/>
+  </>;
+}
+
+function ProgressBar({pct}) {
+  return <div style={{
+    position:'fixed', top:0, left:0, right:0, height:2, zIndex:9998,
+    background:'rgba(255,255,255,0.04)',
+  }}>
+    <div style={{
+      height:'100%', width:`${pct*100}%`, background:'var(--accent)',
+      transition:'width 0.1s',
+    }}/>
+  </div>;
+}
+
+function Nav({tweaks}) {
+  const items = [
+    {id:'about', label:'About'},
+    {id:'works', label:'Works'},
+    {id:'gallery', label:'Gallery'},
+    {id:'links', label:'Links'},
+  ];
+  return <nav style={{
+    position:'fixed', top:0, left:0, right:0, zIndex:100,
+    padding:'20px 6vw', display:'flex', justifyContent:'space-between', alignItems:'center',
+    background:'linear-gradient(to bottom, rgba(10,11,15,0.9), rgba(10,11,15,0))',
+    backdropFilter:'blur(8px)',
+  }}>
+    <div style={{display:'flex', alignItems:'center', gap:12, fontFamily:'"JetBrains Mono", monospace', fontSize:13}}>
+      <span style={{color:'var(--accent)'}}>{'</>'}</span>
+      <span>kokoa0429</span>
+    </div>
+    <div style={{display:'flex', gap:28, fontSize:13, fontFamily:'"JetBrains Mono", monospace'}}>
+      {items.map(it => (
+        <a key={it.id} href={`#${it.id}`} style={{textDecoration:'none', color:'rgba(238,240,242,0.7)', letterSpacing:'0.05em', transition:'color 0.2s'}}
+           onMouseEnter={e=>e.currentTarget.style.color='var(--accent)'}
+           onMouseLeave={e=>e.currentTarget.style.color='rgba(238,240,242,0.7)'}>
+          {it.label}
+        </a>
+      ))}
+    </div>
+    <a href={PROFILE.links.github} target="_blank" rel="noopener noreferrer" style={{
+      fontSize:12, fontFamily:'"JetBrains Mono", monospace',
+      padding:'8px 14px', border:'1px solid var(--accent)', color:'var(--accent)',
+      textDecoration:'none', letterSpacing:'0.05em',
+    }}>GitHub ↗</a>
+  </nav>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
