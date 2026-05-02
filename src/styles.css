@@ -1,0 +1,54 @@
+  :root {
+    --bg: #0a0b0f;
+    --fg: #eef0f2;
+    --accent: oklch(0.87 0.19 112);
+    --muted: rgba(238,240,242,0.6);
+  }
+  [data-accent="cyan"]   { --accent: oklch(0.72 0.17 245); }
+  [data-accent="violet"] { --accent: oklch(0.72 0.18 300); }
+  [data-accent="amber"]  { --accent: oklch(0.82 0.17 75); }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--bg); color: var(--fg); }
+  body {
+    font-family: Manrope, "Zen Kaku Gothic New", sans-serif;
+    font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  @media (max-width: 900px) { body { cursor: auto; } }
+  a { color: inherit; }
+  button { font-family: inherit; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes floatChip { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes scrollProgress { to { transform: scaleX(1); } }
+  @keyframes avatarSpin {
+    0%   { transform: rotateY(0deg); }
+    42%  { transform: rotateY(0deg); }
+    50%  { transform: rotateY(180deg); }
+    92%  { transform: rotateY(180deg); }
+    100% { transform: rotateY(360deg); }
+  }
+  @media (max-width: 900px) {
+    section > div[style*="grid-template-columns: 1.15fr 1fr"],
+    section > div[style*="grid-template-columns: 1.2fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+    section > div[style*="grid-template-columns: 80px 1fr 2fr 100px"] {
+      grid-template-columns: 40px 1fr !important;
+    }
+    section > div[style*="grid-template-columns: 80px 1fr 2fr 100px"] > :nth-child(3),
+    section > div[style*="grid-template-columns: 80px 1fr 2fr 100px"] > :nth-child(4) {
+      grid-column: 2 / 3;
+    }
+    nav > div[style*="gap: 28px"] { display: none !important; }
+  }
+  @media (max-width: 640px) {
+    section { padding-left: 5vw !important; padding-right: 5vw !important; }
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .masonry-cols { column-count: 4; }
+  @media (max-width: 1100px) { .masonry-cols { column-count: 3; } }
+  @media (max-width: 780px)  { .masonry-cols { column-count: 2; } }
+  @media (max-width: 480px)  { .masonry-cols { column-count: 1; } }
+  ::selection { background: var(--accent); color: #0a0b0f; }

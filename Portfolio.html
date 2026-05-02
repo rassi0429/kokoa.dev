@@ -120,6 +120,7 @@ function App() {
       <ProgressBar pct={scrollPct}/>
       <Nav tweaks={tweaks}/>
       <Hero tweaks={tweaks} mouse={mouse}/>
+      <Links tweaks={tweaks}/>
       <About tweaks={tweaks}/>
       <Works tweaks={tweaks}/>
       <Skills tweaks={tweaks}/>
@@ -163,10 +164,10 @@ function ProgressBar({pct}) {
 
 function Nav({tweaks}) {
   const items = [
+    {id:'links', label:'Links'},
     {id:'about', label:'About'},
     {id:'works', label:'Works'},
     {id:'gallery', label:'Gallery'},
-    {id:'links', label:'Links'},
   ];
   return <nav style={{
     position:'fixed', top:0, left:0, right:0, zIndex:100,

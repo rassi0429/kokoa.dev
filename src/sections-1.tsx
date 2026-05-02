@@ -1,8 +1,14 @@
+import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
+import avatarPose from '../assets/avatar-pose.png';
+import avatarWeb from '../assets/avatar-web.png';
+import { PROFILE } from './data';
+import type { MouseState, Tweaks } from './types';
+
 // Main sections for KOKOA portfolio
-const { useState: useStateS, useEffect: useEffectS, useRef: useRefS, useMemo: useMemoS } = React;
 
 // --- Hero -----------------------------------------------------------
-function Hero({ tweaks, mouse }) {
+export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
   const L = tweaks.lang === 'en';
   const parallaxX = mouse.x * 20;
   const parallaxY = mouse.y * 15;
@@ -13,7 +19,7 @@ function Hero({ tweaks, mouse }) {
       display:'flex', alignItems:'center', padding:'120px 6vw 80px',
     }}>
       {/* Background effects */}
-      <BgFx tweaks={tweaks} mouse={mouse}/>
+      <BgFx tweaks={tweaks}/>
 
       {/* Decorative angled lines */}
       <svg style={{position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none', opacity:0.35}}>
@@ -104,7 +110,7 @@ function Hero({ tweaks, mouse }) {
               transformStyle:'preserve-3d',
               animation:'avatarSpin 9s cubic-bezier(0.65, 0, 0.35, 1) infinite',
             }}>
-              <img src="assets/avatar-web.png" alt="KOKOA avatar A"
+              <img src={avatarWeb} alt="KOKOA avatar A"
                 style={{
                   position:'absolute', bottom:0, right:0, height:'100%', width:'100%',
                   objectFit:'contain', objectPosition:'bottom right',
@@ -112,7 +118,7 @@ function Hero({ tweaks, mouse }) {
                   backfaceVisibility:'hidden',
                   WebkitBackfaceVisibility:'hidden',
                 }}/>
-              <img src="assets/avatar-pose.png" alt="KOKOA avatar B"
+              <img src={avatarPose} alt="KOKOA avatar B"
                 style={{
                   position:'absolute', bottom:0, right:0, height:'100%', width:'100%',
                   objectFit:'contain', objectPosition:'bottom right',
@@ -144,7 +150,7 @@ function Hero({ tweaks, mouse }) {
   );
 }
 
-function CTA({children, onClick, primary}) {
+function CTA({ children, onClick, primary = false }: { children: ReactNode; onClick: () => void; primary?: boolean }) {
   return <button onClick={onClick} style={{
     padding:'14px 24px', fontSize:14, fontWeight:500,
     background: primary ? 'var(--accent)' : 'transparent',
@@ -170,7 +176,7 @@ function Arrow() {
   return <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" strokeWidth="1.5"/></svg>;
 }
 
-function FloatingChip({style, label}) {
+function FloatingChip({ style, label }: { style: CSSProperties; label: string }) {
   return <div style={{
     position:'absolute', padding:'6px 12px',
     border:'1px solid var(--accent)',
@@ -205,7 +211,7 @@ function CodeRain() {
   }}>{lines.join('\n').repeat(3)}</pre>;
 }
 
-function BgFx({ tweaks }) {
+function BgFx({ tweaks }: { tweaks: Tweaks }) {
   if (tweaks.bg === 'plain') return null;
   if (tweaks.bg === 'grid') return <div style={{
     position:'absolute', inset:0,
@@ -227,12 +233,12 @@ function BgFx({ tweaks }) {
 }
 
 // --- About ---------------------------------------------------------
-function About({ tweaks }) {
+export function About({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
-  const [typed, setTyped] = useStateS('');
+  const [typed, setTyped] = useState('');
   const full = `$ whoami\nKOKOA (@kokoa0429) — ${PROFILE.role}\n\n$ cat about.txt`;
 
-  useEffectS(() => {
+  useEffect(() => {
     const el = document.getElementById('about');
     if (!el) return;
     const io = new IntersectionObserver(([e]) => {
@@ -312,14 +318,14 @@ function About({ tweaks }) {
   );
 }
 
-function InfoRow({k, v}) {
+function InfoRow({ k, v }: { k: string; v: ReactNode }) {
   return <div style={{display:'grid', gridTemplateColumns:'100px 1fr', gap:16, fontSize:14, paddingBottom:12, borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
     <div style={{color:'rgba(238,240,242,0.4)', fontFamily:'"JetBrains Mono", monospace', fontSize:11, paddingTop:2, letterSpacing:'0.05em'}}>{k}</div>
     <div>{v}</div>
   </div>;
 }
 
-function SectionHeader({num, title, subtitle}) {
+export function SectionHeader({ num, title, subtitle }: { num: string; title: string; subtitle: string }) {
   return <div style={{maxWidth:1280, margin:'0 auto', display:'flex', alignItems:'baseline', gap:20}}>
     <span style={{fontFamily:'"JetBrains Mono", monospace', fontSize:13, color:'var(--accent)'}}>{num}</span>
     <h2 style={{
@@ -330,7 +336,3 @@ function SectionHeader({num, title, subtitle}) {
     <span style={{flex:1, height:1, background:'rgba(255,255,255,0.08)', marginLeft:8}}/>
   </div>;
 }
-
-window.Hero = Hero;
-window.About = About;
-window.SectionHeader = SectionHeader;

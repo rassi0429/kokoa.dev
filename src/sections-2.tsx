@@ -1,10 +1,26 @@
+import type { CSSProperties, Dispatch, SetStateAction } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { ORGS, PROFILE, SKILLS, WORKS } from './data';
+import { SectionHeader } from './sections-1';
+import type { Tweaks, Work } from './types';
+
 // Works (compact) + Skills (compact) + Orgs (compact) + Gallery + Footer
-const { useState: useStateW, useRef: useRefW, useEffect: useEffectW } = React;
+type BoothWork = {
+  id: string;
+  name: string;
+  tag: string;
+  desc_jp: string;
+  desc_en: string;
+  price: string;
+  hearts: string;
+};
+
+type GalleryItem = { id: number; h: number; hue: number; caption: string };
 
 // --- Works (compact) ----------------------------------------------
-function Works({ tweaks }) {
+export function Works({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
-  const booth = [
+  const booth: BoothWork[] = [
     { id:'sukesuke', name:'すけすけ位置合わせツール', tag:'BOOTH · Unity', desc_jp:'位置合わせ簡単！なんでもスケスケツール', desc_en:'Make-anything-translucent helper for alignment.', price:'¥500', hearts:'2792' },
     { id:'upload-notify', name:'アップロード完了通知ツール', tag:'BOOTH · Unity', desc_jp:'音と通知でアップロード完了を知らせる', desc_en:'Sound + notification when uploads finish.', price:'¥500', hearts:'660' },
     { id:'mochi-hoppe', name:'もちもちほっぺツール', tag:'BOOTH · ここあ式', desc_jp:'MA対応・汎用設計。簡単セットアップ！', desc_en:'Squishy-cheek tool. MA-compatible, plug-and-play.', price:'¥750', hearts:'1583' },
@@ -31,7 +47,7 @@ function Works({ tweaks }) {
   );
 }
 
-function BoothCard({work, index, L}) {
+function BoothCard({ work, index, L }: { work: BoothWork; index: number; L: boolean }) {
   return (
     <div style={{
       padding:20, border:'1px solid rgba(255,255,255,0.08)',
@@ -55,10 +71,10 @@ function BoothCard({work, index, L}) {
   );
 }
 
-function MiniWorkCard({work, index, L}) {
-  const ref = useRefW(null);
-  const [visible, setVisible] = useStateW(false);
-  useEffectW(() => {
+function MiniWorkCard({ work, index, L }: { work: Work; index: number; L: boolean }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
     const t = setTimeout(() => setVisible(true), 80 + index * 60);
     if (!ref.current) return () => clearTimeout(t);
     try {
@@ -91,7 +107,7 @@ function MiniWorkCard({work, index, L}) {
 }
 
 // --- Skills (compact) ---------------------------------------------
-function Skills({ tweaks }) {
+export function Skills({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   return (
     <section id="skills" data-screen-label="05 Stack" style={{padding:'100px 6vw'}}>
@@ -116,7 +132,7 @@ function Skills({ tweaks }) {
 }
 
 // --- Gallery (masonry) --------------------------------------------
-const GALLERY = Array.from({length:20}, (_, i) => {
+const GALLERY: GalleryItem[] = Array.from({length:20}, (_, i) => {
   // Mix of heights for masonry feel — deterministic so it's stable
   const heights = [320, 240, 380, 280, 340, 220, 360, 300, 260, 400, 240, 320, 280, 360, 220, 340, 300, 380, 260, 320];
   // Hue rotation for placeholder variety
@@ -132,13 +148,13 @@ const GALLERY = Array.from({length:20}, (_, i) => {
   return { id:i, h: heights[i], hue: hues[i], caption: captions[i] };
 });
 
-function Gallery({ tweaks }) {
+export function Gallery({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
-  const [openIdx, setOpenIdx] = useStateW(null);
-  const ref = useRefW(null);
-  const [visible, setVisible] = useStateW(false);
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const ref = useRef<HTMLElement | null>(null);
+  const [visible, setVisible] = useState(false);
 
-  useEffectW(() => {
+  useEffect(() => {
     if (!ref.current) return;
     try {
       const io = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), {threshold:0.05});
@@ -147,12 +163,12 @@ function Gallery({ tweaks }) {
     } catch (e) {}
   }, []);
 
-  useEffectW(() => {
+  useEffect(() => {
     if (openIdx === null) return;
     const onKey = (e) => {
       if (e.key === 'Escape') setOpenIdx(null);
-      if (e.key === 'ArrowRight') setOpenIdx(i => (i+1) % GALLERY.length);
-      if (e.key === 'ArrowLeft') setOpenIdx(i => (i-1+GALLERY.length) % GALLERY.length);
+      if (e.key === 'ArrowRight') setOpenIdx(i => i === null ? 0 : (i+1) % GALLERY.length);
+      if (e.key === 'ArrowLeft') setOpenIdx(i => i === null ? GALLERY.length - 1 : (i-1+GALLERY.length) % GALLERY.length);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -179,7 +195,7 @@ function Gallery({ tweaks }) {
   );
 }
 
-function PhotoTile({ g, i, visible, onOpen }) {
+function PhotoTile({ g, i, visible, onOpen }: { g: GalleryItem; i: number; visible: boolean; onOpen: () => void }) {
   return (
     <div onClick={onOpen} style={{
       breakInside:'avoid',
@@ -195,16 +211,16 @@ function PhotoTile({ g, i, visible, onOpen }) {
     }}
     onMouseEnter={e => {
       e.currentTarget.style.borderColor='var(--accent)';
-      const img = e.currentTarget.querySelector('.photo-bg');
+      const img = e.currentTarget.querySelector<HTMLElement>('.photo-bg');
       if (img) img.style.transform='scale(1.05)';
-      const cap = e.currentTarget.querySelector('.photo-cap');
+      const cap = e.currentTarget.querySelector<HTMLElement>('.photo-cap');
       if (cap) cap.style.transform='translateY(0)';
     }}
     onMouseLeave={e => {
       e.currentTarget.style.borderColor='rgba(255,255,255,0.06)';
-      const img = e.currentTarget.querySelector('.photo-bg');
+      const img = e.currentTarget.querySelector<HTMLElement>('.photo-bg');
       if (img) img.style.transform='scale(1)';
-      const cap = e.currentTarget.querySelector('.photo-cap');
+      const cap = e.currentTarget.querySelector<HTMLElement>('.photo-cap');
       if (cap) cap.style.transform='translateY(100%)';
     }}>
       {/* placeholder gradient */}
@@ -247,7 +263,7 @@ function PhotoTile({ g, i, visible, onOpen }) {
   );
 }
 
-function Lightbox({ idx, setIdx }) {
+function Lightbox({ idx, setIdx }: { idx: number; setIdx: Dispatch<SetStateAction<number | null>> }) {
   const g = GALLERY[idx];
   return (
     <div onClick={()=>setIdx(null)} style={{
@@ -256,8 +272,8 @@ function Lightbox({ idx, setIdx }) {
       zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center',
       animation:'fadeIn 0.2s ease',
     }}>
-      <button onClick={e => { e.stopPropagation(); setIdx(i=>(i-1+GALLERY.length)%GALLERY.length); }} style={lbBtn('left')}>‹</button>
-      <button onClick={e => { e.stopPropagation(); setIdx(i=>(i+1)%GALLERY.length); }} style={lbBtn('right')}>›</button>
+      <button onClick={e => { e.stopPropagation(); setIdx(i => i === null ? GALLERY.length - 1 : (i-1+GALLERY.length)%GALLERY.length); }} style={lbBtn('left')}>‹</button>
+      <button onClick={e => { e.stopPropagation(); setIdx(i => i === null ? 0 : (i+1)%GALLERY.length); }} style={lbBtn('right')}>›</button>
       <button onClick={e => { e.stopPropagation(); setIdx(null); }} style={{
         position:'absolute', top:20, right:24, fontSize:18, color:'#fff',
         background:'transparent', border:'none', cursor:'pointer',
@@ -288,7 +304,7 @@ function Lightbox({ idx, setIdx }) {
   );
 }
 
-function lbBtn(side) {
+function lbBtn(side: 'left' | 'right'): CSSProperties {
   return {
     position:'absolute', [side]:24, top:'50%', transform:'translateY(-50%)',
     width:48, height:48, borderRadius:24,
@@ -299,7 +315,7 @@ function lbBtn(side) {
 }
 
 // --- Orgs (inline strip) ------------------------------------------
-function Orgs({ tweaks }) {
+export function Orgs({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   const subset = ORGS.slice(0, 5); // just a few
   return (
@@ -318,7 +334,7 @@ function Orgs({ tweaks }) {
 }
 
 // --- Links --------------------------------------------------------
-function Links({ tweaks }) {
+export function Links({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   return (
     <section id="links" data-screen-label="02 Links" style={{padding:'100px 6vw'}}>
@@ -336,7 +352,7 @@ function Links({ tweaks }) {
 }
 
 // --- Footer -------------------------------------------------------
-function Footer() {
+export function Footer() {
   return (
     <footer style={{padding:'0 6vw 60px'}}>
       <div style={{maxWidth:1280, margin:'0 auto', paddingTop:40, borderTop:'1px solid rgba(255,255,255,0.08)', display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:12, fontFamily:'"JetBrains Mono", monospace', color:'rgba(238,240,242,0.4)'}}>
@@ -347,7 +363,7 @@ function Footer() {
   );
 }
 
-function LinkCard({href, title, sub, icon}) {
+function LinkCard({ href, title, sub, icon }: { href: string; title: string; sub: string; icon: string }) {
   return <a href={href} target="_blank" rel="noopener noreferrer" style={{
     display:'flex', alignItems:'center', gap:14, padding:20,
     border:'1px solid rgba(255,255,255,0.08)',
@@ -366,9 +382,3 @@ function LinkCard({href, title, sub, icon}) {
   </a>;
 }
 
-window.Works = Works;
-window.Skills = Skills;
-window.Orgs = Orgs;
-window.Gallery = Gallery;
-window.Links = Links;
-window.Footer = Footer;
