@@ -418,10 +418,11 @@ export const WORKS: Work[] = [
 ];
 
 export const SKILLS: SkillGroup[] = [
-  { group: 'Frontend', items: ['TypeScript', 'Vue', 'React', 'Next.js', 'Vite'] },
-  { group: 'Backend', items: ['Node.js', 'Express', 'PostgreSQL', 'Redis', 'Docker'] },
+  { group: 'Web / App', items: ['TypeScript', 'Vue', 'React', 'Next.js', 'Vite'] },
+  { group: 'Backend / Data', items: ['Node.js', 'Express', 'PostgreSQL', 'Redis', 'Docker'] },
   { group: 'VR / 3D', items: ['Resonite', 'VRChat SDK', 'Unity', 'C#', 'Blender'] },
-  { group: 'Infra', items: ['Linux', 'GitHub Actions', 'Cloudflare', 'nginx', 'systemd'] },
+  { group: 'Hardware / FPGA', items: ['FPGA', 'Chisel', 'Verilog', 'PCB', 'IoT'] },
+  { group: 'Infra / Ops', items: ['Linux', 'GitHub Actions', 'Cloudflare', 'nginx', 'systemd'] },
 ];
 
 export const ORGS: Org[] = [

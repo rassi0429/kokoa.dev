@@ -12,9 +12,23 @@ const TWEAK_DEFAULTS: Tweaks = {
   cursor: 'on',
 };
 
+const WORK_QUERY_VALUES = new Set(['', '1', 'true', 'on', 'yes']);
+const HOBBY_QUERY_VALUES = new Set(['0', 'false', 'off', 'no', 'hobby']);
+
+function getInitialPersona(): PersonaMode {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has('work')) return 'hobby';
+
+  const normalized = (params.get('work') ?? '').toLowerCase();
+  if (WORK_QUERY_VALUES.has(normalized)) return 'work';
+  if (HOBBY_QUERY_VALUES.has(normalized)) return 'hobby';
+
+  return 'hobby';
+}
+
 export function App() {
   const [tweaks, setTweaks] = useState<Tweaks>(TWEAK_DEFAULTS);
-  const [persona, setPersona] = useState<PersonaMode>('hobby');
+  const [persona, setPersona] = useState<PersonaMode>(() => getInitialPersona());
   const [mouse, setMouse] = useState<MouseState>({ x: 0, y: 0, rawX: 0, rawY: 0 });
   const [scrollPct, setScrollPct] = useState(0);
 
