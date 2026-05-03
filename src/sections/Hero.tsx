@@ -6,7 +6,6 @@ import type { MouseState, PersonaMode, Tweaks } from '../types';
 type HeroChip = { ico: string; label: string };
 type HeroCopy = {
   kicker: string;
-  alias: string;
   body: string;
   primaryCta: string;
   secondaryCta: string;
@@ -19,7 +18,6 @@ function getHeroCopy(persona: PersonaMode, english: boolean): HeroCopy {
   if (persona === 'work') {
     return {
       kicker: english ? 'WORK MODE / VR x WEB PRODUCT' : '仕事の姿 / VR x Web プロダクト',
-      alias: english ? 'work mode' : '仕事モード',
       body: english
         ? 'I design and build across VR and the web, from small tools to product architecture. This side is where the technical work lives.'
         : 'VR と Web のあいだで、ちいさな道具からプロダクト設計まで作っています。技術の話はこっちの姿でまとめています。',
@@ -50,31 +48,31 @@ function getHeroCopy(persona: PersonaMode, english: boolean): HeroCopy {
   }
 
   return {
-    kicker: english ? 'HOBBY MODE / VR DAYS' : '趣味の姿 / VR で過ごす日',
-    alias: english ? 'hobby mode' : '趣味モード',
+    kicker: english ? 'MAKE WHAT I WANT TO MAKE!' : '作りたいものをつくる！',
     body: english
-      ? 'I spend most of my free time wandering Resonite and VRChat, taking screenshots, tuning avatars, and hanging out in worlds I like.'
-      : 'Resonite と VRChat を行ったり来たりしながら、ワールドを散歩したり、写真を撮ったり、好きなアバターでゆっくり過ごしています。',
+      ? 'I go back and forth between Resonite and VRChat, wandering worlds, taking photos, and relaxing as a boyish avatar. I make the things I end up wanting during that everyday VR life, then share them on places like Booth.'
+      : 'Resonite と VRChat を行ったり来たりしながら、ワールドを散歩したり、写真を撮ったり、少年アバターでゆっくり過ごしています。 \n 普段過ごす間に作りたくなったものを作って、Boothなどで公開しています！',
     primaryCta: english ? 'Open Links' : 'Links を見る',
     secondaryCta: english ? 'About Me' : 'About',
     chips: [
-      { ico: '♪', label: 'Resonite で散歩' },
-      { ico: '✶', label: 'VRChat でだべる' },
-      { ico: '◈', label: '少年アバター' },
-      { ico: '◇', label: 'ワールド巡り' },
-      { ico: '◎', label: '写真を撮る' },
-      { ico: '✦', label: 'まったり' },
+      { ico: '♪', label: english ? 'Making things in Resonite' : 'Resoniteで何かを作る' },
+      { ico: '✶', label: english ? 'Chatting in VRChat' : 'VRChatでだべる' },
+      { ico: '◈', label: english ? 'Boyish avatar' : '少年アバター' },
+      { ico: '◉', label: 'Booth' },
+      { ico: '◐', label: english ? 'Making stuff' : '創作' },
+      { ico: '◇', label: english ? 'World hopping' : 'ワールド巡り' },
+      { ico: '◎', label: english ? 'Taking photos' : '写真を撮る' },
     ],
-    floating: ['Resonite', 'VRChat', 'いつもの姿'],
+    floating: ['Resonite', 'VRChat', 'Booth'],
     panelLines: [
       'Resonite world hopping',
       'VRChat friends night',
-      'favorite avatar notes',
-      'slow walk / good view',
-      'screenshots after midnight',
+      'making things in Resonite',
+      'Booth release notes',
+      'photos after midnight',
       '',
       'status: relaxed',
-      'mood: stay a little longer',
+      'mood: make what I want',
     ],
   };
 }
@@ -113,9 +111,6 @@ export function Hero({ tweaks, mouse, persona }: { tweaks: Tweaks; mouse: MouseS
             fontFamily:'Manrope, "Zen Kaku Gothic New", sans-serif',
           }}>
             <span style={{display:'block'}}>KOKOA</span>
-            <span style={{display:'block', fontSize:'0.38em', fontWeight:500, marginTop:6, letterSpacing:'0em', fontFamily:'"Zen Kaku Gothic New", sans-serif', color:'rgba(238,240,242,0.65)'}}>
-              {copy.alias}
-            </span>
             <span style={{display:'block', color:'var(--accent)', fontFamily:'"JetBrains Mono", monospace', fontSize:'0.28em', fontWeight:500, letterSpacing:'0.02em', marginTop:10}}>
               @kokoa0429
             </span>
