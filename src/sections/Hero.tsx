@@ -10,6 +10,8 @@ export function Hero({ tweaks, mouse, persona }: { tweaks: Tweaks; mouse: MouseS
   const isWork = persona === 'work';
   const parallaxX = mouse.x * 20;
   const parallaxY = mouse.y * 15;
+  const primaryTarget = isWork ? 'works' : 'links';
+  const secondaryTarget = isWork ? 'links' : 'works';
 
   return (
     <section
@@ -101,15 +103,10 @@ export function Hero({ tweaks, mouse, persona }: { tweaks: Tweaks; mouse: MouseS
           </p>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <CTA
-              primary
-              onClick={() =>
-                document.getElementById(isWork ? 'works' : 'links')?.scrollIntoView({ behavior: 'smooth' })
-              }
-            >
+            <CTA primary onClick={() => document.getElementById(primaryTarget)?.scrollIntoView({ behavior: 'smooth' })}>
               {copy.primaryCta} <Arrow />
             </CTA>
-            <CTA onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>
+            <CTA onClick={() => document.getElementById(secondaryTarget)?.scrollIntoView({ behavior: 'smooth' })}>
               {copy.secondaryCta}
             </CTA>
           </div>

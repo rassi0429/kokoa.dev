@@ -6,7 +6,7 @@ export function Orgs({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   const subset = ORGS.slice(0, 5); // just a few
   return (
-    <section id="orgs" data-screen-label="07 Orgs" style={{ padding: '70px 6vw' }}>
+    <section id="orgs" data-screen-label="06 Orgs" style={{ padding: '70px 6vw' }}>
       <div
         style={{
           maxWidth: 1280,

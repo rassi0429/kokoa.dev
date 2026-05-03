@@ -66,8 +66,8 @@ export function Works({ tweaks }: { tweaks: Tweaks }) {
   const featured = WORKS.filter(w => ['photo-neos', 'novelai'].includes(w.id));
 
   return (
-    <section id="works" data-screen-label="04 Works" style={{ padding: '100px 6vw' }}>
-      <SectionHeader num="04" title="Works" subtitle={L ? 'BOOTH tools & a few projects' : 'BOOTHツール＆いろいろ'} />
+    <section id="works" data-screen-label="03 Works" style={{ padding: '100px 6vw' }}>
+      <SectionHeader num="03" title="Works" subtitle={L ? 'BOOTH tools & a few projects' : 'BOOTHツール＆いろいろ'} />
       <div style={{ maxWidth: 1280, margin: '40px auto 0' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
           {booth.map((w, i) => (

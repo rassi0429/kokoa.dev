@@ -13,7 +13,6 @@ const PERSONA_OPTIONS: Array<{ id: PersonaMode; label: string; short: string }> 
 export function Nav({ persona, onPersonaChange }: NavProps) {
   const items = [
     { id: 'links', label: 'Links' },
-    { id: 'about', label: 'About' },
     { id: 'works', label: 'Works' },
     { id: 'gallery', label: 'Gallery' },
   ];

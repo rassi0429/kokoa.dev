@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Cursor, Nav, ProgressBar, TweaksPanel } from './components';
-import { About, Footer, Gallery, Hero, Links, Orgs, Skills, Works } from './sections';
+import { Footer, Gallery, Hero, Links, Orgs, Skills, Works } from './sections';
 import type { MouseState, PersonaMode, Tweaks } from './types';
 
 const TWEAK_DEFAULTS: Tweaks = {
@@ -53,7 +53,6 @@ export function App() {
       <Nav persona={persona} onPersonaChange={setPersona} />
       <Hero tweaks={tweaks} mouse={mouse} persona={persona} />
       <Links tweaks={tweaks} />
-      <About tweaks={tweaks} />
       <Works tweaks={tweaks} />
       <Skills tweaks={tweaks} />
       <Gallery tweaks={tweaks} />

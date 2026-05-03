@@ -5,6 +5,7 @@ export type Density = 'compact' | 'normal' | 'airy';
 export type WorkFilter = 'all' | 'web' | 'vr' | 'tool';
 export type CursorMode = 'on' | 'off';
 export type PersonaMode = 'hobby' | 'work';
+export type ProfileLinkIcon = 'github' | 'x' | 'misskey' | 'resonite' | 'booth';
 
 export interface Tweaks {
   accent: Accent;
@@ -53,10 +54,30 @@ export interface Profile {
   likes: Array<{ ico: string; label: string }>;
   links: {
     github: string;
+    booth: string;
     x: string;
+    xVrc: string;
     misskey: string;
     resonite: string;
   };
+}
+
+export interface ProfileLinkCard {
+  id: string;
+  href: string;
+  title: string;
+  sub: string;
+  icon: ProfileLinkIcon;
+  note_jp: string;
+  note_en: string;
+}
+
+export interface GalleryPhoto {
+  id: string;
+  src: string;
+  caption_jp: string;
+  caption_en: string;
+  height: number;
 }
 
 export interface Work {

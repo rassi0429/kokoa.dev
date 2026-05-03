@@ -6,8 +6,8 @@ import type { Tweaks } from '../types';
 export function Skills({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   return (
-    <section id="skills" data-screen-label="05 Stack" style={{ padding: '100px 6vw' }}>
-      <SectionHeader num="05" title="Stack" subtitle={L ? 'Tools I reach for' : '普段触っているもの'} />
+    <section id="skills" data-screen-label="04 Stack" style={{ padding: '100px 6vw' }}>
+      <SectionHeader num="04" title="Stack" subtitle={L ? 'Tools I reach for' : '普段触っているもの'} />
       <div style={{ maxWidth: 1280, margin: '40px auto 0', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
         {SKILLS.flatMap(g => g.items).map(it => (
           <span

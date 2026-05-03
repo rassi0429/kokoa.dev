@@ -1,4 +1,13 @@
-import type { HeroCopyByPersona, Org, Profile, SkillGroup, TimelineItem, Work } from './types';
+import type {
+  GalleryPhoto,
+  HeroCopyByPersona,
+  Org,
+  Profile,
+  ProfileLinkCard,
+  SkillGroup,
+  TimelineItem,
+  Work,
+} from './types';
 
 // Shared data for KOKOA portfolio
 
@@ -25,7 +34,9 @@ export const PROFILE: Profile = {
   ],
   links: {
     github: 'https://github.com/kokoa0429',
+    booth: 'https://kokoa0429.booth.pm/',
     x: 'https://twitter.com/ciel_vr',
+    xVrc: 'https://x.com/kka_vrc',
     misskey: 'https://misskey.resonite.love/@kokoa_',
     resonite: 'https://resonite.love/',
   },
@@ -37,7 +48,7 @@ export const HERO_COPY: HeroCopyByPersona = {
       kicker: '仕事の姿',
       body: 'VRやWebをメインに、基板設計やFPGA、IoT周りの開発もしています。フルスタックになりたい。',
       primaryCta: 'Works を見る',
-      secondaryCta: 'About',
+      secondaryCta: 'Links を見る',
       chips: [
         { ico: '01', label: 'VR' },
         { ico: '02', label: 'Web' },
@@ -63,7 +74,7 @@ export const HERO_COPY: HeroCopyByPersona = {
       kicker: 'WORK MODE / VR x WEB x HARDWARE',
       body: 'I mainly build around VR and the web, and I also work on PCB design, FPGA, and IoT projects. I want to become a full-stack developer.',
       primaryCta: 'View Works',
-      secondaryCta: 'About Me',
+      secondaryCta: 'Open Links',
       chips: [
         { ico: '01', label: 'VR' },
         { ico: '02', label: 'Web' },
@@ -91,7 +102,7 @@ export const HERO_COPY: HeroCopyByPersona = {
       kicker: '作りたいものをつくる！',
       body: 'Resonite と VRChat を行ったり来たりしながら、ワールドを散歩したり、写真を撮ったり、少年アバターでゆっくり過ごしています。 \n 普段過ごす間に作りたくなったものを作って、Boothなどで公開しています！',
       primaryCta: 'Links を見る',
-      secondaryCta: 'About',
+      secondaryCta: 'Works を見る',
       chips: [
         { ico: '♪', label: 'Resoniteで何かを作る' },
         { ico: '✶', label: 'VRChatでだべる' },
@@ -117,7 +128,7 @@ export const HERO_COPY: HeroCopyByPersona = {
       kicker: 'MAKE WHAT I WANT TO MAKE!',
       body: 'I go back and forth between Resonite and VRChat, wandering worlds, taking photos, and relaxing as a boyish avatar. I make the things I end up wanting during that everyday VR life, then share them on places like Booth.',
       primaryCta: 'Open Links',
-      secondaryCta: 'About Me',
+      secondaryCta: 'View Works',
       chips: [
         { ico: '♪', label: 'Making things in Resonite' },
         { ico: '✶', label: 'Chatting in VRChat' },
@@ -141,6 +152,150 @@ export const HERO_COPY: HeroCopyByPersona = {
     },
   },
 };
+
+export const PROFILE_LINKS: ProfileLinkCard[] = [
+  {
+    id: 'github',
+    href: PROFILE.links.github,
+    title: 'GitHub',
+    sub: '@kokoa0429',
+    icon: 'github',
+    note_jp: 'コードと小さな実験を置いています。',
+    note_en: 'Code, experiments, and small tools.',
+  },
+  {
+    id: 'x',
+    href: PROFILE.links.x,
+    title: 'X / Twitter',
+    sub: '@ciel_vr',
+    icon: 'x',
+    note_jp: '日常とVRまわりの軽い更新。',
+    note_en: 'Daily notes and VR-adjacent updates.',
+  },
+  {
+    id: 'x-vrc',
+    href: PROFILE.links.xVrc,
+    title: 'X / VRC',
+    sub: '@kka_vrc',
+    icon: 'x',
+    note_jp: 'VRChat向けの話と更新。',
+    note_en: 'VRChat-focused notes and updates.',
+  },
+  {
+    id: 'booth',
+    href: PROFILE.links.booth,
+    title: 'BOOTH',
+    sub: 'kokoa0429.booth.pm',
+    icon: 'booth',
+    note_jp: '作ったものを置いています。',
+    note_en: 'Things I made and publish.',
+  },
+  {
+    id: 'misskey',
+    href: PROFILE.links.misskey,
+    title: 'Misskey',
+    sub: '@kokoa_',
+    icon: 'misskey',
+    note_jp: 'Resonite寄りの話をゆるく書く場所。',
+    note_en: 'Loose notes around Resonite.',
+  },
+  {
+    id: 'resonite',
+    href: PROFILE.links.resonite,
+    title: 'Resonite',
+    sub: 'resonite.love',
+    icon: 'resonite',
+    note_jp: 'よくいるVRの生活圏。',
+    note_en: 'My usual VR home base.',
+  },
+];
+
+export const GALLERY_PHOTOS: GalleryPhoto[] = [
+  {
+    id: 'resonite-closeup',
+    src: new URL('../assets/photos/resonite-closeup-2022.jpg', import.meta.url).href,
+    caption_jp: 'Resonite / 近すぎる自撮り',
+    caption_en: 'Resonite / too-close selfie',
+    height: 320,
+  },
+  {
+    id: 'witch-avatar',
+    src: new URL('../assets/photos/witch-avatar-2023.jpg', import.meta.url).href,
+    caption_jp: '魔女帽子の日',
+    caption_en: 'Witch-hat avatar day',
+    height: 300,
+  },
+  {
+    id: 'maid-portrait',
+    src: new URL('../assets/photos/maid-portrait-2023.jpg', import.meta.url).href,
+    caption_jp: 'メイド服ポートレート',
+    caption_en: 'Maid outfit portrait',
+    height: 360,
+  },
+  {
+    id: 'space-nameplate',
+    src: new URL('../assets/photos/space-nameplate-2023.jpg', import.meta.url).href,
+    caption_jp: 'kokoa0429 の名札',
+    caption_en: 'kokoa0429 nameplate',
+    height: 300,
+  },
+  {
+    id: 'maid-sleepy-closeup',
+    src: new URL('../assets/photos/maid-sleepy-closeup-2023.jpg', import.meta.url).href,
+    caption_jp: '眠そうなメイド',
+    caption_en: 'Sleepy maid close-up',
+    height: 340,
+  },
+  {
+    id: 'sunset-maid',
+    src: new URL('../assets/photos/sunset-maid-2023.jpg', import.meta.url).href,
+    caption_jp: '夕焼けの桟橋',
+    caption_en: 'Sunset pier',
+    height: 320,
+  },
+  {
+    id: 'keylock-clear',
+    src: new URL('../assets/photos/keylock-clear-2024.jpg', import.meta.url).href,
+    caption_jp: 'KEY LOCK CLEAR',
+    caption_en: 'KEY LOCK CLEAR',
+    height: 280,
+  },
+  {
+    id: 'maid-room',
+    src: new URL('../assets/photos/maid-room-2024.jpg', import.meta.url).href,
+    caption_jp: '部屋での一枚',
+    caption_en: 'Room portrait',
+    height: 320,
+  },
+  {
+    id: 'purple-closeup',
+    src: new URL('../assets/photos/purple-closeup-2024.jpg', import.meta.url).href,
+    caption_jp: '紫ライトのアップ',
+    caption_en: 'Purple-lit close-up',
+    height: 340,
+  },
+  {
+    id: 'vrchat-event',
+    src: new URL('../assets/photos/vrchat-event-2024.jpg', import.meta.url).href,
+    caption_jp: 'イベント会場',
+    caption_en: 'VRChat event floor',
+    height: 320,
+  },
+  {
+    id: 'neon-stage',
+    src: new URL('../assets/photos/neon-stage-2024.jpg', import.meta.url).href,
+    caption_jp: 'ネオンステージ',
+    caption_en: 'Neon stage',
+    height: 320,
+  },
+  {
+    id: 'vrchat-friends',
+    src: new URL('../assets/photos/vrchat-friends-2024.jpg', import.meta.url).href,
+    caption_jp: 'フレンドと集合',
+    caption_en: 'With friends',
+    height: 300,
+  },
+];
 
 export const WORKS: Work[] = [
   {

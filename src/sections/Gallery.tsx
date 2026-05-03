@@ -1,81 +1,39 @@
 import type { CSSProperties, Dispatch, SetStateAction } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SectionHeader } from '../components';
-import type { Tweaks } from '../types';
-
-type GalleryItem = { id: number; h: number; hue: number; caption: string };
-
-// --- Gallery (masonry) --------------------------------------------
-const GALLERY: GalleryItem[] = Array.from({ length: 20 }, (_, i) => {
-  // Mix of heights for masonry feel — deterministic so it's stable
-  const heights = [320, 240, 380, 280, 340, 220, 360, 300, 260, 400, 240, 320, 280, 360, 220, 340, 300, 380, 260, 320];
-  // Hue rotation for placeholder variety
-  const hues = [200, 220, 250, 280, 240, 210, 260, 230, 200, 270, 240, 220, 250, 210, 280, 230, 260, 240, 220, 200];
-  const captions = [
-    'Resonite · 散歩中',
-    'VRChat · friends',
-    'Resonite · ワールド探索',
-    'VRChat · イベント',
-    'Resonite · 工作中',
-    '少年アバター',
-    'メイド服 work mode',
-    'Resonite · 夜景',
-    'VRChat · 集合写真',
-    'お出かけ',
-    'Resonite · 開発テスト',
-    'VRChat · まったり',
-    '黒上着+黄緑',
-    'Resonite · 空',
-    'VRChat · 鏡前',
-    'カメラ目線',
-    'Resonite · 配信',
-    'VRChat · ライブ',
-    '誰かのワールドにて',
-    'こっち向いて',
-  ];
-  return { id: i, h: heights[i], hue: hues[i], caption: captions[i] };
-});
+import { GALLERY_PHOTOS } from '../data';
+import type { GalleryPhoto, Tweaks } from '../types';
 
 export function Gallery({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const ref = useRef<HTMLElement | null>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    try {
-      const io = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), { threshold: 0.05 });
-      io.observe(ref.current);
-      return () => io.disconnect();
-    } catch (e) {}
-  }, []);
 
   useEffect(() => {
     if (openIdx === null) return;
-    const onKey = e => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpenIdx(null);
-      if (e.key === 'ArrowRight') setOpenIdx(i => (i === null ? 0 : (i + 1) % GALLERY.length));
+      if (e.key === 'ArrowRight') setOpenIdx(i => (i === null ? 0 : (i + 1) % GALLERY_PHOTOS.length));
       if (e.key === 'ArrowLeft')
-        setOpenIdx(i => (i === null ? GALLERY.length - 1 : (i - 1 + GALLERY.length) % GALLERY.length));
+        setOpenIdx(i =>
+          i === null ? GALLERY_PHOTOS.length - 1 : (i - 1 + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length,
+        );
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [openIdx]);
 
   return (
-    <section id="gallery" data-screen-label="06 Gallery" ref={ref} style={{ padding: '100px 6vw' }}>
-      <SectionHeader num="06" title="Gallery" subtitle={L ? 'Photos from VR' : 'VRからのスナップ'} />
+    <section id="gallery" data-screen-label="05 Gallery" style={{ padding: '100px 6vw' }}>
+      <SectionHeader num="05" title="Gallery" subtitle={L ? 'Photos from VR' : 'VRからのスナップ'} />
       <div style={{ maxWidth: 1400, margin: '40px auto 0' }}>
         <div
           style={{
-            columnCount: 4,
             columnGap: 14,
           }}
           className="masonry-cols"
         >
-          {GALLERY.map((g, i) => (
-            <PhotoTile key={g.id} g={g} i={i} visible={visible} onOpen={() => setOpenIdx(i)} />
+          {GALLERY_PHOTOS.map((photo, i) => (
+            <PhotoTile key={photo.id} photo={photo} index={i} english={L} onOpen={() => setOpenIdx(i)} />
           ))}
         </div>
         <div
@@ -88,118 +46,115 @@ export function Gallery({ tweaks }: { tweaks: Tweaks }) {
           }}
         >
           {L
-            ? '// Click any tile to enlarge · ←/→ to browse · Esc to close'
-            : '// クリックで拡大 · ←/→で移動 · Escで閉じる'}
+            ? '// Click any photo to enlarge / use arrows / Esc to close'
+            : '// 写真をクリックで拡大 / 矢印キーで移動 / Escで閉じる'}
         </div>
       </div>
-      {openIdx !== null && <Lightbox idx={openIdx} setIdx={setOpenIdx} />}
+      {openIdx !== null && <Lightbox idx={openIdx} english={L} setIdx={setOpenIdx} />}
     </section>
   );
 }
 
-function PhotoTile({ g, i, visible, onOpen }: { g: GalleryItem; i: number; visible: boolean; onOpen: () => void }) {
+function PhotoTile({
+  photo,
+  index,
+  english,
+  onOpen,
+}: {
+  photo: GalleryPhoto;
+  index: number;
+  english: boolean;
+  onOpen: () => void;
+}) {
+  const caption = english ? photo.caption_en : photo.caption_jp;
+
   return (
-    <div
+    <button
+      type="button"
+      aria-label={`${caption}を開く`}
       onClick={onOpen}
       style={{
         breakInside: 'avoid',
-        marginBottom: 14,
-        height: g.h,
+        margin: '0 0 14px',
+        padding: 0,
+        width: '100%',
+        height: photo.height,
         position: 'relative',
         cursor: 'pointer',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(14,16,22,0.4)',
         overflow: 'hidden',
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-        transition: `all 0.6s cubic-bezier(0.2,0.8,0.2,1) ${i * 30}ms`,
+        color: '#fff',
+        textAlign: 'left',
+        display: 'block',
       }}
       onMouseEnter={e => {
         e.currentTarget.style.borderColor = 'var(--accent)';
-        const img = e.currentTarget.querySelector<HTMLElement>('.photo-bg');
-        if (img) img.style.transform = 'scale(1.05)';
-        const cap = e.currentTarget.querySelector<HTMLElement>('.photo-cap');
-        if (cap) cap.style.transform = 'translateY(0)';
+        const img = e.currentTarget.querySelector<HTMLElement>('.photo-img');
+        if (img) img.style.transform = 'scale(1.04)';
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
-        const img = e.currentTarget.querySelector<HTMLElement>('.photo-bg');
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+        const img = e.currentTarget.querySelector<HTMLElement>('.photo-img');
         if (img) img.style.transform = 'scale(1)';
-        const cap = e.currentTarget.querySelector<HTMLElement>('.photo-cap');
-        if (cap) cap.style.transform = 'translateY(100%)';
       }}
     >
-      {/* placeholder gradient */}
-      <div
-        className="photo-bg"
+      <img
+        className="photo-img"
+        src={photo.src}
+        alt={caption}
+        loading="lazy"
         style={{
           position: 'absolute',
           inset: 0,
-          background: `linear-gradient(${135 + i * 7}deg, oklch(0.35 0.12 ${g.hue}) 0%, oklch(0.18 0.08 ${g.hue + 30}) 50%, oklch(0.12 0.04 ${g.hue}) 100%)`,
-          transition: 'transform 0.6s cubic-bezier(0.2,0.8,0.2,1)',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          transition: 'transform 0.55s cubic-bezier(0.2,0.8,0.2,1)',
         }}
       />
-      {/* placeholder pattern */}
-      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.15 }}>
-        <defs>
-          <pattern id={`grid-${i}`} width="32" height="32" patternUnits="userSpaceOnUse">
-            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="white" strokeWidth="0.5" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill={`url(#grid-${i})`} />
-      </svg>
-      {/* placeholder mark */}
-      <div
+      <span
         style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%,-50%)',
-          fontFamily: '"JetBrains Mono", monospace',
-          fontSize: 11,
-          color: 'rgba(255,255,255,0.3)',
-          letterSpacing: '0.2em',
-        }}
-      >
-        IMG_{String(i + 1).padStart(3, '0')}
-      </div>
-      {/* corner index */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 8,
-          left: 10,
+          top: 10,
+          left: 12,
           fontFamily: '"JetBrains Mono", monospace',
           fontSize: 10,
-          color: 'rgba(255,255,255,0.5)',
-          letterSpacing: '0.1em',
+          letterSpacing: '0.12em',
+          color: 'rgba(255,255,255,0.75)',
+          textShadow: '0 1px 12px rgba(0,0,0,0.8)',
         }}
       >
-        {String(i + 1).padStart(2, '0')}/{GALLERY.length}
-      </div>
-      {/* caption hover */}
+        {String(index + 1).padStart(2, '0')}/{GALLERY_PHOTOS.length}
+      </span>
       <div
-        className="photo-cap"
         style={{
           position: 'absolute',
           left: 0,
           right: 0,
           bottom: 0,
-          padding: '14px 14px 12px',
-          background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent)',
-          fontSize: 12,
-          color: '#fff',
-          transform: 'translateY(100%)',
-          transition: 'transform 0.3s',
+          padding: '34px 14px 13px',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0))',
         }}
       >
-        {g.caption}
+        <span style={{ fontSize: 13, fontWeight: 600, textShadow: '0 1px 10px rgba(0,0,0,0.7)' }}>{caption}</span>
       </div>
-    </div>
+    </button>
   );
 }
 
-function Lightbox({ idx, setIdx }: { idx: number; setIdx: Dispatch<SetStateAction<number | null>> }) {
-  const g = GALLERY[idx];
+function Lightbox({
+  idx,
+  english,
+  setIdx,
+}: {
+  idx: number;
+  english: boolean;
+  setIdx: Dispatch<SetStateAction<number | null>>;
+}) {
+  const photo = GALLERY_PHOTOS[idx];
+  const caption = english ? photo.caption_en : photo.caption_jp;
+
   return (
     <div
       onClick={() => setIdx(null)}
@@ -213,27 +168,33 @@ function Lightbox({ idx, setIdx }: { idx: number; setIdx: Dispatch<SetStateActio
         alignItems: 'center',
         justifyContent: 'center',
         animation: 'fadeIn 0.2s ease',
+        padding: '72px 5vw 40px',
       }}
     >
       <button
+        aria-label={english ? 'Previous photo' : '前の写真'}
         onClick={e => {
           e.stopPropagation();
-          setIdx(i => (i === null ? GALLERY.length - 1 : (i - 1 + GALLERY.length) % GALLERY.length));
+          setIdx(i =>
+            i === null ? GALLERY_PHOTOS.length - 1 : (i - 1 + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length,
+          );
         }}
         style={lbBtn('left')}
       >
         ‹
       </button>
       <button
+        aria-label={english ? 'Next photo' : '次の写真'}
         onClick={e => {
           e.stopPropagation();
-          setIdx(i => (i === null ? 0 : (i + 1) % GALLERY.length));
+          setIdx(i => (i === null ? 0 : (i + 1) % GALLERY_PHOTOS.length));
         }}
         style={lbBtn('right')}
       >
         ›
       </button>
       <button
+        aria-label={english ? 'Close photo' : '写真を閉じる'}
         onClick={e => {
           e.stopPropagation();
           setIdx(null);
@@ -251,52 +212,49 @@ function Lightbox({ idx, setIdx }: { idx: number; setIdx: Dispatch<SetStateActio
           letterSpacing: '0.1em',
         }}
       >
-        ESC ✕
+        ESC ×
       </button>
-      <div
+      <figure
         onClick={e => e.stopPropagation()}
         style={{
-          width: 'min(900px, 80vw)',
-          height: 'min(680px, 80vh)',
-          position: 'relative',
-          border: '1px solid rgba(255,255,255,0.15)',
-          background: `linear-gradient(${135 + idx * 7}deg, oklch(0.4 0.14 ${g.hue}) 0%, oklch(0.18 0.08 ${g.hue + 30}) 50%, oklch(0.12 0.04 ${g.hue}) 100%)`,
+          width: 'min(1180px, 86vw)',
+          maxHeight: '86vh',
+          margin: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
+          alignItems: 'center',
         }}
       >
-        <div
+        <img
+          src={photo.src}
+          alt={caption}
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%,-50%)',
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: 14,
-            color: 'rgba(255,255,255,0.4)',
-            letterSpacing: '0.2em',
+            display: 'block',
+            maxWidth: '100%',
+            maxHeight: '76vh',
+            objectFit: 'contain',
+            border: '1px solid rgba(255,255,255,0.14)',
+            boxShadow: '0 24px 80px rgba(0,0,0,0.55)',
+            background: '#050609',
           }}
-        >
-          IMG_{String(idx + 1).padStart(3, '0')}
-        </div>
-        <div
+        />
+        <figcaption
           style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            padding: '18px 24px',
-            background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)',
-            color: '#fff',
+            width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
+            gap: 20,
             alignItems: 'center',
+            color: '#fff',
           }}
         >
-          <span style={{ fontSize: 14 }}>{g.caption}</span>
+          <span style={{ fontSize: 14 }}>{caption}</span>
           <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>
-            {idx + 1} / {GALLERY.length}
+            {idx + 1} / {GALLERY_PHOTOS.length}
           </span>
-        </div>
-      </div>
+        </figcaption>
+      </figure>
     </div>
   );
 }
@@ -313,10 +271,11 @@ function lbBtn(side: 'left' | 'right'): CSSProperties {
     background: 'rgba(255,255,255,0.08)',
     border: '1px solid rgba(255,255,255,0.2)',
     color: '#fff',
-    fontSize: 24,
+    fontSize: 28,
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
   };
 }
