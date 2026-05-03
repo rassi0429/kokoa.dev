@@ -17,21 +17,20 @@ type HeroCopy = {
 function getHeroCopy(persona: PersonaMode, english: boolean): HeroCopy {
   if (persona === 'work') {
     return {
-      kicker: english ? 'WORK MODE / VR x WEB PRODUCT' : '仕事の姿 / VR x Web プロダクト',
+      kicker: english ? 'WORK MODE / VR x WEB x HARDWARE' : '仕事の姿',
       body: english
-        ? 'I design and build across VR and the web, from small tools to product architecture. This side is where the technical work lives.'
-        : 'VR と Web のあいだで、ちいさな道具からプロダクト設計まで作っています。技術の話はこっちの姿でまとめています。',
+        ? 'I mainly build around VR and the web, and I also work on PCB design, FPGA, and IoT projects. I want to become a full-stack developer.'
+        : 'VRやWebをメインに、基板設計やFPGA、IoT周りの開発もしています。フルスタックになりたい。',
       primaryCta: english ? 'View Works' : 'Works を見る',
       secondaryCta: english ? 'About Me' : 'About',
       chips: [
-        { ico: '01', label: 'WeaverseLab' },
-        { ico: '02', label: 'VR x Web' },
-        { ico: '03', label: 'TypeScript' },
-        { ico: '04', label: 'Product' },
-        { ico: '05', label: 'Community' },
-        { ico: '06', label: 'Ops' },
+        { ico: '01', label: 'VR' },
+        { ico: '02', label: 'Web' },
+        { ico: '03', label: 'NodeJS' },
+        { ico: '04', label: 'FPGA' },
+        { ico: '05', label: 'IoT' },
       ],
-      floating: ['WeaverseLab', 'Product', 'maid work mode'],
+      floating: ['WeaverseLab', english ? 'IA Project' : 'いあぷろじぇくと', 'kokoa inc.'],
       panelLines: [
         'const KOKOA = async () => {',
         '  await connect("vr-and-web");',
