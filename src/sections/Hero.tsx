@@ -1,85 +1,12 @@
 import type { CSSProperties, ReactNode } from 'react';
 import avatarMaid from '../../assets/avatar-maid.png';
 import avatarWeb from '../../assets/avatar-web.png';
+import { HERO_COPY } from '../data';
 import type { MouseState, PersonaMode, Tweaks } from '../types';
-
-type HeroChip = { ico: string; label: string };
-type HeroCopy = {
-  kicker: string;
-  body: string;
-  primaryCta: string;
-  secondaryCta: string;
-  chips: HeroChip[];
-  floating: string[];
-  panelLines: string[];
-};
-
-function getHeroCopy(persona: PersonaMode, english: boolean): HeroCopy {
-  if (persona === 'work') {
-    return {
-      kicker: english ? 'WORK MODE / VR x WEB x HARDWARE' : '仕事の姿',
-      body: english
-        ? 'I mainly build around VR and the web, and I also work on PCB design, FPGA, and IoT projects. I want to become a full-stack developer.'
-        : 'VRやWebをメインに、基板設計やFPGA、IoT周りの開発もしています。フルスタックになりたい。',
-      primaryCta: english ? 'View Works' : 'Works を見る',
-      secondaryCta: english ? 'About Me' : 'About',
-      chips: [
-        { ico: '01', label: 'VR' },
-        { ico: '02', label: 'Web' },
-        { ico: '03', label: 'NodeJS' },
-        { ico: '04', label: 'FPGA' },
-        { ico: '05', label: 'IoT' },
-      ],
-      floating: ['WeaverseLab', english ? 'IA Project' : 'いあぷろじぇくと', 'kokoa inc.'],
-      panelLines: [
-        'const KOKOA = async () => {',
-        '  await connect("vr-and-web");',
-        '  while (coffee.remaining) {',
-        '    ship(await build());',
-        '  }',
-        '  return betterTools;',
-        '};',
-        '',
-        '// work mode',
-        'export default KOKOA;',
-      ],
-    };
-  }
-
-  return {
-    kicker: english ? 'MAKE WHAT I WANT TO MAKE!' : '作りたいものをつくる！',
-    body: english
-      ? 'I go back and forth between Resonite and VRChat, wandering worlds, taking photos, and relaxing as a boyish avatar. I make the things I end up wanting during that everyday VR life, then share them on places like Booth.'
-      : 'Resonite と VRChat を行ったり来たりしながら、ワールドを散歩したり、写真を撮ったり、少年アバターでゆっくり過ごしています。 \n 普段過ごす間に作りたくなったものを作って、Boothなどで公開しています！',
-    primaryCta: english ? 'Open Links' : 'Links を見る',
-    secondaryCta: english ? 'About Me' : 'About',
-    chips: [
-      { ico: '♪', label: english ? 'Making things in Resonite' : 'Resoniteで何かを作る' },
-      { ico: '✶', label: english ? 'Chatting in VRChat' : 'VRChatでだべる' },
-      { ico: '◈', label: english ? 'Boyish avatar' : '少年アバター' },
-      { ico: '◉', label: 'Booth' },
-      { ico: '◐', label: english ? 'Making stuff' : '創作' },
-      { ico: '◇', label: english ? 'World hopping' : 'ワールド巡り' },
-      { ico: '◎', label: english ? 'Taking photos' : '写真を撮る' },
-    ],
-    floating: ['Resonite', 'VRChat', 'Booth'],
-    panelLines: [
-      'Resonite world hopping',
-      'VRChat friends night',
-      'making things in Resonite',
-      'Booth release notes',
-      'photos after midnight',
-      '',
-      'status: relaxed',
-      'mood: make what I want',
-    ],
-  };
-}
 
 // --- Hero -----------------------------------------------------------
 export function Hero({ tweaks, mouse, persona }: { tweaks: Tweaks; mouse: MouseState; persona: PersonaMode }) {
-  const L = tweaks.lang === 'en';
-  const copy = getHeroCopy(persona, L);
+  const copy = HERO_COPY[persona][tweaks.lang];
   const isWork = persona === 'work';
   const parallaxX = mouse.x * 20;
   const parallaxY = mouse.y * 15;

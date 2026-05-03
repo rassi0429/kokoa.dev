@@ -1,4 +1,4 @@
-import type { Org, Profile, SkillGroup, TimelineItem, Work } from './types';
+import type { HeroCopyByPersona, Org, Profile, SkillGroup, TimelineItem, Work } from './types';
 
 // Shared data for KOKOA portfolio
 
@@ -26,6 +26,117 @@ export const PROFILE: Profile = {
     x: "https://twitter.com/ciel_vr",
     misskey: "https://misskey.resonite.love/@kokoa_",
     resonite: "https://resonite.love/",
+  },
+};
+
+export const HERO_COPY: HeroCopyByPersona = {
+  work: {
+    jp: {
+      kicker: '仕事の姿',
+      body: 'VRやWebをメインに、基板設計やFPGA、IoT周りの開発もしています。フルスタックになりたい。',
+      primaryCta: 'Works を見る',
+      secondaryCta: 'About',
+      chips: [
+        { ico: '01', label: 'VR' },
+        { ico: '02', label: 'Web' },
+        { ico: '03', label: 'NodeJS' },
+        { ico: '04', label: 'FPGA' },
+        { ico: '05', label: 'IoT' },
+      ],
+      floating: ['WeaverseLab', 'いあぷろじぇくと', 'kokoa inc.'],
+      panelLines: [
+        'const KOKOA = async () => {',
+        '  await connect("vr-and-web");',
+        '  while (coffee.remaining) {',
+        '    ship(await build());',
+        '  }',
+        '  return betterTools;',
+        '};',
+        '',
+        '// work mode',
+        'export default KOKOA;',
+      ],
+    },
+    en: {
+      kicker: 'WORK MODE / VR x WEB x HARDWARE',
+      body: 'I mainly build around VR and the web, and I also work on PCB design, FPGA, and IoT projects. I want to become a full-stack developer.',
+      primaryCta: 'View Works',
+      secondaryCta: 'About Me',
+      chips: [
+        { ico: '01', label: 'VR' },
+        { ico: '02', label: 'Web' },
+        { ico: '03', label: 'NodeJS' },
+        { ico: '04', label: 'FPGA' },
+        { ico: '05', label: 'IoT' },
+      ],
+      floating: ['WeaverseLab', 'IA Project', 'kokoa inc.'],
+      panelLines: [
+        'const KOKOA = async () => {',
+        '  await connect("vr-and-web");',
+        '  while (coffee.remaining) {',
+        '    ship(await build());',
+        '  }',
+        '  return betterTools;',
+        '};',
+        '',
+        '// work mode',
+        'export default KOKOA;',
+      ],
+    },
+  },
+  hobby: {
+    jp: {
+      kicker: '作りたいものをつくる！',
+      body: 'Resonite と VRChat を行ったり来たりしながら、ワールドを散歩したり、写真を撮ったり、少年アバターでゆっくり過ごしています。 \n 普段過ごす間に作りたくなったものを作って、Boothなどで公開しています！',
+      primaryCta: 'Links を見る',
+      secondaryCta: 'About',
+      chips: [
+        { ico: '♪', label: 'Resoniteで何かを作る' },
+        { ico: '✶', label: 'VRChatでだべる' },
+        { ico: '◈', label: '少年アバター' },
+        { ico: '◉', label: 'Booth' },
+        { ico: '◐', label: '創作' },
+        { ico: '◇', label: 'ワールド巡り' },
+        { ico: '◎', label: '写真を撮る' },
+      ],
+      floating: ['Resonite', 'VRChat', 'Booth'],
+      panelLines: [
+        'Resonite world hopping',
+        'VRChat friends night',
+        'making things in Resonite',
+        'Booth release notes',
+        'photos after midnight',
+        '',
+        'status: relaxed',
+        'mood: make what I want',
+      ],
+    },
+    en: {
+      kicker: 'MAKE WHAT I WANT TO MAKE!',
+      body: 'I go back and forth between Resonite and VRChat, wandering worlds, taking photos, and relaxing as a boyish avatar. I make the things I end up wanting during that everyday VR life, then share them on places like Booth.',
+      primaryCta: 'Open Links',
+      secondaryCta: 'About Me',
+      chips: [
+        { ico: '♪', label: 'Making things in Resonite' },
+        { ico: '✶', label: 'Chatting in VRChat' },
+        { ico: '◈', label: 'Boyish avatar' },
+        { ico: '◉', label: 'Booth' },
+        { ico: '◐', label: 'Making stuff' },
+        { ico: '◇', label: 'World hopping' },
+        { ico: '◎', label: 'Taking photos' },
+      ],
+      floating: ['Resonite', 'VRChat', 'Booth'],
+      panelLines: [
+        'Resonite world hopping',
+        'VRChat friends night',
+        'making things in Resonite',
+        'Booth release notes',
+        'photos after midnight',
+        '',
+        'status: relaxed',
+        'mood: make what I want',
+      ],
+    },
   },
 };
 
@@ -162,4 +273,3 @@ export const TIMELINE: TimelineItem[] = [
   { year: "2022→", title: "photo.neos.love 公開", note: "ソーシャルVRのスクショ共有サービスを運用開始" },
   { year: "2021→", title: "Neos VR / VRChat 深耕", note: "Unity 拡張と Web ツールを量産し始める" },
 ];
-

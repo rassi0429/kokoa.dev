@@ -22,6 +22,24 @@ export interface MouseState {
   rawY: number;
 }
 
+export interface HeroChip {
+  ico: string;
+  label: string;
+}
+
+export interface HeroCopy {
+  kicker: string;
+  body: string;
+  primaryCta: string;
+  secondaryCta: string;
+  chips: HeroChip[];
+  floating: string[];
+  panelLines: string[];
+}
+
+export type HeroCopyByLanguage = Record<Language, HeroCopy>;
+export type HeroCopyByPersona = Record<PersonaMode, HeroCopyByLanguage>;
+
 export interface Profile {
   handle: string;
   name: string;
