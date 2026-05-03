@@ -1,4 +1,16 @@
-export function Nav() {
+import type { PersonaMode } from '../types';
+
+type NavProps = {
+  persona: PersonaMode;
+  onPersonaChange: (persona: PersonaMode) => void;
+};
+
+const PERSONA_OPTIONS: Array<{ id: PersonaMode; label: string; short: string }> = [
+  { id: 'hobby', label: '趣味', short: 'Hobby' },
+  { id: 'work', label: '仕事', short: 'Work' },
+];
+
+export function Nav({ persona, onPersonaChange }: NavProps) {
   const items = [
     { id: 'links', label: 'Links' },
     { id: 'about', label: 'About' },
@@ -39,22 +51,50 @@ export function Nav() {
           </a>
         ))}
       </div>
-      <a
-        href="https://github.com/kokoa0429"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          fontSize: 12,
-          fontFamily: '"JetBrains Mono", monospace',
-          padding: '8px 14px',
-          border: '1px solid var(--accent)',
-          color: 'var(--accent)',
-          textDecoration: 'none',
-          letterSpacing: '0.05em',
-        }}
-      >
-        GitHub &#8599;
-      </a>
+      <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div
+          className="persona-switch"
+          role="group"
+          aria-label="表示モード"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            border: '1px solid rgba(255,255,255,0.14)',
+            background: 'rgba(8,9,13,0.62)',
+            padding: 3,
+            gap: 3,
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: 11,
+            letterSpacing: '0.04em',
+          }}
+        >
+          {PERSONA_OPTIONS.map((mode) => {
+            const active = persona === mode.id;
+            return (
+              <button
+                key={mode.id}
+                type="button"
+                aria-pressed={active}
+                title={mode.short}
+                onClick={() => onPersonaChange(mode.id)}
+                style={{
+                  border: 'none',
+                  background: active ? 'var(--accent)' : 'transparent',
+                  color: active ? '#0a0b0f' : 'rgba(238,240,242,0.66)',
+                  padding: '6px 10px',
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  fontSize: 'inherit',
+                  transition: 'background 0.25s, color 0.25s, transform 0.25s',
+                  transform: active ? 'translateY(-1px)' : 'translateY(0)',
+                }}
+              >
+                {mode.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </nav>
   );
 }

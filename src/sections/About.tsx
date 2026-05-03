@@ -9,6 +9,7 @@ export function About({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   const [typed, setTyped] = useState('');
   const full = `$ whoami\nKOKOA (@kokoa0429) — ${PROFILE.role}\n\n$ cat about.txt`;
+  const typingDone = typed.length >= full.length;
 
   useEffect(() => {
     const el = document.getElementById('about');
@@ -49,12 +50,13 @@ export function About({ tweaks }: { tweaks: Tweaks }) {
           </div>
           <div style={{padding:24, fontSize:13, lineHeight:1.8, minHeight:320, whiteSpace:'pre-wrap'}}>
             <span style={{color:'rgba(255,255,255,0.8)'}}>{typed}</span>
-            <span style={{color:'var(--accent)', animation:'blink 1s step-end infinite'}}>▊</span>
-            {typed.length >= full.length && (
+            {!typingDone && <TerminalCursor />}
+            {typingDone && (
               <div style={{marginTop:16, color:'rgba(238,240,242,0.75)'}}>
                 {L ? PROFILE.bio_en : PROFILE.bio_jp}
                 <div style={{marginTop:20, color:'rgba(255,255,255,0.4)'}}>$ <span style={{color:'var(--accent)'}}>echo $MOTTO</span></div>
                 <div style={{color:'rgba(238,240,242,0.9)'}}>"{L ? PROFILE.tagline_en : PROFILE.tagline_jp}"</div>
+                <div style={{marginTop:20, color:'rgba(255,255,255,0.4)'}}>$ <TerminalCursor /></div>
               </div>
             )}
           </div>
@@ -87,6 +89,23 @@ export function About({ tweaks }: { tweaks: Tweaks }) {
         </div>
       </div>
     </section>
+  );
+}
+
+function TerminalCursor() {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        display: 'inline-block',
+        width: 8,
+        height: '1.2em',
+        marginLeft: 2,
+        background: 'var(--accent)',
+        animation: 'blink 1s step-end infinite',
+        verticalAlign: '-0.2em',
+      }}
+    />
   );
 }
 

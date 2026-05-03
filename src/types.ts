@@ -4,6 +4,7 @@ export type Language = 'jp' | 'en';
 export type Density = 'compact' | 'normal' | 'airy';
 export type WorkFilter = 'all' | 'web' | 'vr' | 'tool';
 export type CursorMode = 'on' | 'off';
+export type PersonaMode = 'hobby' | 'work';
 
 export interface Tweaks {
   accent: Accent;

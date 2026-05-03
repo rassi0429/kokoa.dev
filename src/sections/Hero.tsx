@@ -1,12 +1,89 @@
 import type { CSSProperties, ReactNode } from 'react';
-import avatarPose from '../../assets/avatar-pose.png';
+import avatarMaid from '../../assets/avatar-maid.png';
 import avatarWeb from '../../assets/avatar-web.png';
-import { PROFILE } from '../data';
-import type { MouseState, Tweaks } from '../types';
+import type { MouseState, PersonaMode, Tweaks } from '../types';
+
+type HeroChip = { ico: string; label: string };
+type HeroCopy = {
+  kicker: string;
+  alias: string;
+  body: string;
+  primaryCta: string;
+  secondaryCta: string;
+  chips: HeroChip[];
+  floating: string[];
+  panelLines: string[];
+};
+
+function getHeroCopy(persona: PersonaMode, english: boolean): HeroCopy {
+  if (persona === 'work') {
+    return {
+      kicker: english ? 'WORK MODE / VR x WEB PRODUCT' : '仕事の姿 / VR x Web プロダクト',
+      alias: english ? 'work mode' : '仕事モード',
+      body: english
+        ? 'I design and build across VR and the web, from small tools to product architecture. This side is where the technical work lives.'
+        : 'VR と Web のあいだで、ちいさな道具からプロダクト設計まで作っています。技術の話はこっちの姿でまとめています。',
+      primaryCta: english ? 'View Works' : 'Works を見る',
+      secondaryCta: english ? 'About Me' : 'About',
+      chips: [
+        { ico: '01', label: 'WeaverseLab' },
+        { ico: '02', label: 'VR x Web' },
+        { ico: '03', label: 'TypeScript' },
+        { ico: '04', label: 'Product' },
+        { ico: '05', label: 'Community' },
+        { ico: '06', label: 'Ops' },
+      ],
+      floating: ['WeaverseLab', 'Product', 'maid work mode'],
+      panelLines: [
+        'const KOKOA = async () => {',
+        '  await connect("vr-and-web");',
+        '  while (coffee.remaining) {',
+        '    ship(await build());',
+        '  }',
+        '  return betterTools;',
+        '};',
+        '',
+        '// work mode',
+        'export default KOKOA;',
+      ],
+    };
+  }
+
+  return {
+    kicker: english ? 'HOBBY MODE / VR DAYS' : '趣味の姿 / VR で過ごす日',
+    alias: english ? 'hobby mode' : '趣味モード',
+    body: english
+      ? 'I spend most of my free time wandering Resonite and VRChat, taking screenshots, tuning avatars, and hanging out in worlds I like.'
+      : 'Resonite と VRChat を行ったり来たりしながら、ワールドを散歩したり、写真を撮ったり、好きなアバターでゆっくり過ごしています。',
+    primaryCta: english ? 'Open Links' : 'Links を見る',
+    secondaryCta: english ? 'About Me' : 'About',
+    chips: [
+      { ico: '♪', label: 'Resonite で散歩' },
+      { ico: '✶', label: 'VRChat でだべる' },
+      { ico: '◈', label: '少年アバター' },
+      { ico: '◇', label: 'ワールド巡り' },
+      { ico: '◎', label: '写真を撮る' },
+      { ico: '✦', label: 'まったり' },
+    ],
+    floating: ['Resonite', 'VRChat', 'いつもの姿'],
+    panelLines: [
+      'Resonite world hopping',
+      'VRChat friends night',
+      'favorite avatar notes',
+      'slow walk / good view',
+      'screenshots after midnight',
+      '',
+      'status: relaxed',
+      'mood: stay a little longer',
+    ],
+  };
+}
 
 // --- Hero -----------------------------------------------------------
-export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
+export function Hero({ tweaks, mouse, persona }: { tweaks: Tweaks; mouse: MouseState; persona: PersonaMode }) {
   const L = tweaks.lang === 'en';
+  const copy = getHeroCopy(persona, L);
+  const isWork = persona === 'work';
   const parallaxX = mouse.x * 20;
   const parallaxY = mouse.y * 15;
 
@@ -28,7 +105,7 @@ export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
         <div>
           <div style={{fontFamily:'"JetBrains Mono", monospace', fontSize:13, color:'var(--accent)', marginBottom:20, letterSpacing:'0.15em', display:'flex', alignItems:'center', gap:12}}>
             <span style={{display:'inline-block', width:32, height:1, background:'var(--accent)'}}/>
-            <span>{L ? "WANT TO DO EVERYTHING · HAVE FUN" : "なんでもやりたい！楽しみたい！"}</span>
+            <span>{copy.kicker}</span>
           </div>
           <h1 style={{
             fontSize:'clamp(56px, 9vw, 132px)', lineHeight:0.92, fontWeight:800,
@@ -37,7 +114,7 @@ export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
           }}>
             <span style={{display:'block'}}>KOKOA</span>
             <span style={{display:'block', fontSize:'0.38em', fontWeight:500, marginTop:6, letterSpacing:'0em', fontFamily:'"Zen Kaku Gothic New", sans-serif', color:'rgba(238,240,242,0.65)'}}>
-              ここあ
+              {copy.alias}
             </span>
             <span style={{display:'block', color:'var(--accent)', fontFamily:'"JetBrains Mono", monospace', fontSize:'0.28em', fontWeight:500, letterSpacing:'0.02em', marginTop:10}}>
               @kokoa0429
@@ -47,20 +124,20 @@ export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
             fontSize:18, lineHeight:1.7, maxWidth:540, margin:'36px 0 40px',
             color:'rgba(238,240,242,0.75)',
           }}>
-            {L ? PROFILE.bio_en : PROFILE.bio_jp}
+            {copy.body}
           </p>
 
           <div style={{display:'flex', gap:12, flexWrap:'wrap'}}>
-            <CTA primary onClick={()=>document.getElementById('works')?.scrollIntoView({behavior:'smooth'})}>
-              {L ? 'View Works' : 'Works を見る'} <Arrow/>
+            <CTA primary onClick={()=>document.getElementById(isWork ? 'works' : 'links')?.scrollIntoView({behavior:'smooth'})}>
+              {copy.primaryCta} <Arrow/>
             </CTA>
             <CTA onClick={()=>document.getElementById('about')?.scrollIntoView({behavior:'smooth'})}>
-              {L ? 'About Me' : 'About'}
+              {copy.secondaryCta}
             </CTA>
           </div>
 
           <div style={{display:'flex', gap:10, marginTop:48, flexWrap:'wrap', fontSize:12, fontFamily:'"JetBrains Mono", monospace'}}>
-            {PROFILE.likes.map(l => (
+            {copy.chips.map(l => (
               <div key={l.label} style={{
                 display:'inline-flex', alignItems:'center', gap:8,
                 padding:'7px 12px',
@@ -77,7 +154,7 @@ export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
 
         {/* Avatar column */}
         <div style={{
-          position:'relative', height:'min(680px, 80vh)',
+          position:'relative', height:'min(980px, 116vh)', marginTop:-120, marginBottom:-150,
           transform:`translate(${parallaxX}px, ${parallaxY}px)`,
           transition:'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
         }}>
@@ -89,7 +166,7 @@ export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
             borderRadius:2,
             overflow:'hidden',
           }}>
-            <CodeRain/>
+            <ModePanel lines={copy.panelLines} persona={persona} />
           </div>
           {/* Accent bars */}
           <div style={{position:'absolute', top:'8%', right:'5%', width:2, height:80, background:'var(--accent)'}}/>
@@ -105,19 +182,20 @@ export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
             <div className="avatar-flipper" style={{
               position:'absolute', inset:0,
               transformStyle:'preserve-3d',
-              animation:'avatarSpin 9s cubic-bezier(0.65, 0, 0.35, 1) infinite',
+              transform: isWork ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              transition:'transform 0.9s cubic-bezier(0.65, 0, 0.35, 1)',
             }}>
               <img src={avatarWeb} alt="KOKOA avatar A"
                 style={{
-                  position:'absolute', bottom:0, right:0, height:'100%', width:'100%',
+                  position:'absolute', bottom:'-10%', right:'-7%', height:'124%', width:'124%',
                   objectFit:'contain', objectPosition:'bottom right',
                   filter:'drop-shadow(0 20px 60px rgba(0,0,0,0.5))',
                   backfaceVisibility:'hidden',
                   WebkitBackfaceVisibility:'hidden',
                 }}/>
-              <img src={avatarPose} alt="KOKOA avatar B"
+              <img src={avatarMaid} alt="KOKOA work outfit maid avatar"
                 style={{
-                  position:'absolute', bottom:0, right:0, height:'100%', width:'100%',
+                  position:'absolute', bottom:'-10%', right:'-7%', height:'124%', width:'124%',
                   objectFit:'contain', objectPosition:'bottom right',
                   filter:'drop-shadow(0 20px 60px rgba(0,0,0,0.5))',
                   backfaceVisibility:'hidden',
@@ -128,9 +206,9 @@ export function Hero({ tweaks, mouse }: { tweaks: Tweaks; mouse: MouseState }) {
           </div>
 
           {/* Floating tag chips */}
-          <FloatingChip style={{top:'14%', left:'2%', animationDelay:'0s'}} label="Resonite"/>
-          <FloatingChip style={{top:'44%', left:'-2%', animationDelay:'1.2s'}} label="VRChat"/>
-          <FloatingChip style={{bottom:'18%', right:'2%', animationDelay:'2.4s'}} label="少年アバター"/>
+          <FloatingChip style={{top:'14%', left:'2%', animationDelay:'0s'}} label={copy.floating[0]}/>
+          <FloatingChip style={{top:'44%', left:'-2%', animationDelay:'1.2s'}} label={copy.floating[1]}/>
+          <FloatingChip style={{bottom:'18%', right:'2%', animationDelay:'2.4s'}} label={copy.floating[2]}/>
         </div>
       </div>
 
@@ -185,27 +263,17 @@ function FloatingChip({ style, label }: { style: CSSProperties; label: string })
   }}>{label}</div>;
 }
 
-function CodeRain() {
-  const lines = [
-    'const KOKOA = async () => {',
-    '  await connect("resonite");',
-    '  while (coffee.remaining) {',
-    '    ship(await build());',
-    '  }',
-    '  return garbageCode;',
-    '};',
-    '',
-    '// 毎日量産してます',
-    'export default KOKOA;',
-  ];
+function ModePanel({ lines, persona }: { lines: string[]; persona: PersonaMode }) {
+  const repeated = persona === 'work' ? lines.join('\n').repeat(3) : lines.join('\n\n');
   return <pre style={{
     fontFamily:'"JetBrains Mono", monospace',
-    fontSize:11, lineHeight:1.7,
-    color:'rgba(238,240,242,0.22)',
+    fontSize:11,
+    lineHeight: persona === 'work' ? 1.7 : 1.9,
+    color:'rgba(238,240,242,0.24)',
     margin:0, padding:20,
     userSelect:'none',
     whiteSpace:'pre',
-  }}>{lines.join('\n').repeat(3)}</pre>;
+  }}>{repeated}</pre>;
 }
 
 function BgFx({ tweaks }: { tweaks: Tweaks }) {

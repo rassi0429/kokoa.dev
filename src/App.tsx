@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Cursor, Nav, ProgressBar, TweaksPanel } from './components';
 import { About, Footer, Gallery, Hero, Links, Orgs, Skills, Works } from './sections';
-import type { MouseState, Tweaks } from './types';
+import type { MouseState, PersonaMode, Tweaks } from './types';
 
 const TWEAK_DEFAULTS: Tweaks = {
   accent: 'cyan',
@@ -14,6 +14,7 @@ const TWEAK_DEFAULTS: Tweaks = {
 
 export function App() {
   const [tweaks, setTweaks] = useState<Tweaks>(TWEAK_DEFAULTS);
+  const [persona, setPersona] = useState<PersonaMode>('hobby');
   const [mouse, setMouse] = useState<MouseState>({ x: 0, y: 0, rawX: 0, rawY: 0 });
   const [scrollPct, setScrollPct] = useState(0);
 
@@ -41,12 +42,16 @@ export function App() {
     document.documentElement.dataset.accent = tweaks.accent;
   }, [tweaks.accent]);
 
+  useEffect(() => {
+    document.documentElement.dataset.persona = persona;
+  }, [persona]);
+
   return (
     <div>
       <Cursor mouse={mouse} enabled={tweaks.cursor === 'on'} />
       <ProgressBar pct={scrollPct} />
-      <Nav />
-      <Hero tweaks={tweaks} mouse={mouse} />
+      <Nav persona={persona} onPersonaChange={setPersona} />
+      <Hero tweaks={tweaks} mouse={mouse} persona={persona} />
       <Links tweaks={tweaks} />
       <About tweaks={tweaks} />
       <Works tweaks={tweaks} />
