@@ -153,8 +153,8 @@ export function Hero({ tweaks, mouse, persona }: { tweaks: Tweaks; mouse: MouseS
         </div>
 
         {/* Avatar column */}
-        <div style={{
-          position:'relative', height:'min(980px, 116vh)', marginTop:-120, marginBottom:-150,
+        <div className="hero-avatar-stage" style={{
+          position:'relative',
           transform:`translate(${parallaxX}px, ${parallaxY}px)`,
           transition:'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
         }}>
@@ -185,19 +185,13 @@ export function Hero({ tweaks, mouse, persona }: { tweaks: Tweaks; mouse: MouseS
               transform: isWork ? 'rotateY(180deg)' : 'rotateY(0deg)',
               transition:'transform 0.9s cubic-bezier(0.65, 0, 0.35, 1)',
             }}>
-              <img src={avatarWeb} alt="KOKOA avatar A"
+              <img className="hero-avatar-image" src={avatarWeb} alt="KOKOA avatar A"
                 style={{
-                  position:'absolute', bottom:'-10%', right:'-7%', height:'124%', width:'124%',
-                  objectFit:'contain', objectPosition:'bottom right',
-                  filter:'drop-shadow(0 20px 60px rgba(0,0,0,0.5))',
                   backfaceVisibility:'hidden',
                   WebkitBackfaceVisibility:'hidden',
                 }}/>
-              <img src={avatarMaid} alt="KOKOA work outfit maid avatar"
+              <img className="hero-avatar-image" src={avatarMaid} alt="KOKOA work outfit maid avatar"
                 style={{
-                  position:'absolute', bottom:'-10%', right:'-7%', height:'124%', width:'124%',
-                  objectFit:'contain', objectPosition:'bottom right',
-                  filter:'drop-shadow(0 20px 60px rgba(0,0,0,0.5))',
                   backfaceVisibility:'hidden',
                   WebkitBackfaceVisibility:'hidden',
                   transform:'rotateY(180deg)',
