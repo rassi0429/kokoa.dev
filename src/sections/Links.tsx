@@ -18,11 +18,11 @@ const PROFILE_LINKS: ProfileLink[] = [
 export function Links({ tweaks }: { tweaks: Tweaks }) {
   const L = tweaks.lang === 'en';
   return (
-    <section id="links" data-screen-label="02 Links" style={{padding:'100px 6vw'}}>
-      <SectionHeader num="02" title="Links" subtitle={L?"Find me elsewhere":"他のところでは"}/>
-      <div style={{maxWidth:1280, margin:'40px auto 0'}}>
-        <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', gap:12}}>
-          {PROFILE_LINKS.map((link) => (
+    <section id="links" data-screen-label="02 Links" style={{ padding: '100px 6vw' }}>
+      <SectionHeader num="02" title="Links" subtitle={L ? 'Find me elsewhere' : '他のところでは'} />
+      <div style={{ maxWidth: 1280, margin: '40px auto 0' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
+          {PROFILE_LINKS.map(link => (
             <LinkCard key={link.title} {...link} />
           ))}
         </div>
@@ -32,24 +32,56 @@ export function Links({ tweaks }: { tweaks: Tweaks }) {
 }
 
 function LinkCard({ href, title, sub, icon }: ProfileLink) {
-  return <a href={href} target="_blank" rel="noopener noreferrer" style={{
-    display:'flex', alignItems:'center', gap:14, padding:20,
-    border:'1px solid rgba(255,255,255,0.08)',
-    background:'rgba(14,16,22,0.4)',
-    textDecoration:'none', color:'var(--fg)',
-    transition:'all 0.2s', position:'relative',
-  }}
-  onMouseEnter={e=>{e.currentTarget.style.borderColor='var(--accent)'; e.currentTarget.style.transform='translateY(-2px)';}}
-  onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(255,255,255,0.08)'; e.currentTarget.style.transform='translateY(0)';}}>
-    <div style={{width:44, height:44, flex:'0 0 44px', border:'1px solid rgba(255,255,255,0.15)', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--accent)', background:'rgba(255,255,255,0.03)'}}>
-      <BrandIcon icon={icon} />
-    </div>
-    <div style={{flex:1}}>
-      <div style={{fontSize:14, fontWeight:600}}>{title}</div>
-      <div style={{fontSize:11, fontFamily:'"JetBrains Mono", monospace', color:'rgba(238,240,242,0.5)'}}>{sub}</div>
-    </div>
-    <span style={{color:'rgba(238,240,242,0.4)'}}>&#8599;</span>
-  </a>;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 14,
+        padding: 20,
+        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(14,16,22,0.4)',
+        textDecoration: 'none',
+        color: 'var(--fg)',
+        transition: 'all 0.2s',
+        position: 'relative',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = 'var(--accent)';
+        e.currentTarget.style.transform = 'translateY(-2px)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+        e.currentTarget.style.transform = 'translateY(0)';
+      }}
+    >
+      <div
+        style={{
+          width: 44,
+          height: 44,
+          flex: '0 0 44px',
+          border: '1px solid rgba(255,255,255,0.15)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'var(--accent)',
+          background: 'rgba(255,255,255,0.03)',
+        }}
+      >
+        <BrandIcon icon={icon} />
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 14, fontWeight: 600 }}>{title}</div>
+        <div style={{ fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: 'rgba(238,240,242,0.5)' }}>
+          {sub}
+        </div>
+      </div>
+      <span style={{ color: 'rgba(238,240,242,0.4)' }}>&#8599;</span>
+    </a>
+  );
 }
 
 function BrandIcon({ icon }: { icon: LinkIcon }) {

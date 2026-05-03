@@ -34,18 +34,35 @@ export function Nav({ persona, onPersonaChange }: NavProps) {
         backdropFilter: 'blur(8px)',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontFamily: '"JetBrains Mono", monospace', fontSize: 13 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          fontFamily: '"JetBrains Mono", monospace',
+          fontSize: 13,
+        }}
+      >
         <span style={{ color: 'var(--accent)' }}>{'</>'}</span>
         <span>kokoa0429</span>
       </div>
       <div style={{ display: 'flex', gap: 28, fontSize: 13, fontFamily: '"JetBrains Mono", monospace' }}>
-        {items.map((it) => (
+        {items.map(it => (
           <a
             key={it.id}
             href={'#' + it.id}
-            style={{ textDecoration: 'none', color: 'rgba(238,240,242,0.7)', letterSpacing: '0.05em', transition: 'color 0.2s' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(238,240,242,0.7)'; }}
+            style={{
+              textDecoration: 'none',
+              color: 'rgba(238,240,242,0.7)',
+              letterSpacing: '0.05em',
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.color = 'var(--accent)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.color = 'rgba(238,240,242,0.7)';
+            }}
           >
             {it.label}
           </a>
@@ -68,7 +85,7 @@ export function Nav({ persona, onPersonaChange }: NavProps) {
             letterSpacing: '0.04em',
           }}
         >
-          {PERSONA_OPTIONS.map((mode) => {
+          {PERSONA_OPTIONS.map(mode => {
             const active = persona === mode.id;
             return (
               <button
